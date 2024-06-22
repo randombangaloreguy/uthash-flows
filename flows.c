@@ -80,9 +80,11 @@ void process_packet(u_char *args, const struct pcap_pkthdr *header, const u_char
 
     // Add the flow entry to the flow table
     char data[64];
-    sprintf(data, "%s  %s:%d -> %s:%d", (key.proto==6)?"TCP":"UDP",
-                inet_ntoa(*(struct in_addr *)&(key.src_ip)), key.src_port,
-                inet_ntoa(*(struct in_addr *)&(key.dst_ip)), key.dst_port);
+    char source[24];
+    char dest[24];
+    sprintf(source, "%s:%d", inet_ntoa(*(struct in_addr *)&(key.src_ip)), key.src_port);
+    sprintf(dest, "%s:%d", inet_ntoa(*(struct in_addr *)&(key.dst_ip)), key.dst_port);
+    sprintf(data, "%s  %s -> %s", (key.proto==6)?"TCP":"UDP", source, dest);
     add_flow(&key, data);
 }
 
